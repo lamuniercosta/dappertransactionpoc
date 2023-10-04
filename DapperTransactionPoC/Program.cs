@@ -1,4 +1,6 @@
 ﻿using DapperTransactionPoC;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped(typeof(DatabaseService));
