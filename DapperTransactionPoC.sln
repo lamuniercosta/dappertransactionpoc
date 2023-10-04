@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C2F30C32-8173-4AA4-A10F-B84ED5FF6B1C}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DapperTransactionPoC", "DapperTransactionPoC\DapperTransactionPoC.csproj", "{8081AD94-3ABF-49FB-832F-028CB2BCC214}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DapperTransactionPoC.Tests", "DapperTransactionPoC.Tests\DapperTransactionPoC.Tests.csproj", "{8CE1FD2B-20C9-4D46-8050-C19694EEDE03}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8081AD94-3ABF-49FB-832F-028CB2BCC214}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8081AD94-3ABF-49FB-832F-028CB2BCC214}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8081AD94-3ABF-49FB-832F-028CB2BCC214}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8081AD94-3ABF-49FB-832F-028CB2BCC214}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CE1FD2B-20C9-4D46-8050-C19694EEDE03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CE1FD2B-20C9-4D46-8050-C19694EEDE03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CE1FD2B-20C9-4D46-8050-C19694EEDE03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CE1FD2B-20C9-4D46-8050-C19694EEDE03}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
