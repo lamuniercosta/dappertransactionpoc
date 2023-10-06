@@ -2,6 +2,7 @@
 using System.Data;
 using System.Transactions;
 using Dapper;
+using Dapper.Transaction;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 
@@ -9,9 +10,6 @@ namespace DapperTransactionPoC;
 
 public class DatabaseService
 {
-    public int CountTransactionsFirstConnection { get; private set; }
-    public int CountTransactionsSecondConnection { get; private set; }
-    
     private readonly string _primaryConnectionString;
     private readonly string _secondaryConnectionString;
     
@@ -29,28 +27,45 @@ public class DatabaseService
 
     public void ExecuteScript()
     {
+        using var firstConnection = PrimaryDbConnection();
+        firstConnection.Open();
+        using var firstTransaction = firstConnection.BeginTransaction();
+        
+        using var secondConnection = SecondaryDbConnection();
+        secondConnection.Open();
+        using var secondTransaction = secondConnection.BeginTransaction();
+        
         try
         {
-            using var transaction = new TransactionScope();
-            
-            using var firstConnection = PrimaryDbConnection();
             const string firstCommand = "insert into PrimaryTable(Name) values (@Name);";
-            firstConnection.Execute(firstCommand, new { Name = "TestValue" });
+            firstTransaction.Execute(firstCommand, new { Name = "TestValue" });
             
-            using var secondConnection = SecondaryDbConnection();
-            const string secondCommand = "insert into SecondaryTable(Name) values (@Name);";
-            secondConnection.Execute(secondCommand, new { Name = "TestValue" });
-
-            CountTransactionsFirstConnection =
-                firstConnection
-                    .QuerySingle<int>("select @@trancount");
-
-            CountTransactionsSecondConnection =
-                secondConnection
-                    .QuerySingle<int>("select @@trancount");
+            try
+            {
+                const string secondCommand = "insert into SecondTable(Name) values (@Name);";
+                secondTransaction.Execute(secondCommand, new { Name = "TestValue" });
+                
+                firstTransaction.Commit();
+                secondTransaction.Commit();
+            }
+            catch (SqlException e)
+            {
+                firstTransaction.Rollback();
+                secondTransaction.Rollback();
+                Console.WriteLine(e);
+                throw;
+            }
         }
-        catch (Exception e)
+        catch (SqlException e)
         {
+            if (firstTransaction.Connection != null)
+            {
+                firstTransaction.Rollback();
+            }
+            if (secondTransaction.Connection != null)
+            {
+                secondTransaction.Rollback();
+            }
             Console.WriteLine(e);
             throw;
         }
